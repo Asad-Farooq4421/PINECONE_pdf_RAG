@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background: transparent; font-family: sans-serif; }
+        #canvas-box { width: 100%; height: 220px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .rocket-overlay {
+            position: absolute;
+            bottom: 15px;
+            color: #38BDF8;
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+            animation: pulse 1.2s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1.02); }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-box">
+        <div class="rocket-overlay">🚀 LAUNCHING VECTOR INGESTION ENGINE...</div>
+    </div>
+
+    <script>
+        const container = document.getElementById('canvas-box');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, container.clientWidth / 220, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(container.clientWidth, 220);
+        container.appendChild(renderer.domElement);
+
+        // 3D Rocket Assembly
+        const rocketGroup = new THREE.Group();
+
+        // Cone Nose
+        const noseGeo = new THREE.ConeGeometry(0.5, 1, 16);
+        const noseMat = new THREE.MeshBasicMaterial({ color: 0xEF4444 }); // Red Nose
+        const nose = new THREE.Mesh(noseGeo, noseMat);
+        nose.position.y = 1.2;
+        rocketGroup.add(nose);
+
+        // Cylinder Fuselage
+        const bodyGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.5, 16);
+        const bodyMat = new THREE.MeshBasicMaterial({ color: 0xF8FAFC }); // White Body
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        rocketGroup.add(body);
+
+        // Thruster Flames (Particles)
+        const particleCount = 60;
+        const flameGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        for(let i=0; i<particleCount*3; i+=3) {
+            positions[i] = (Math.random() - 0.5) * 0.4;
+            positions[i+1] = -0.8 - Math.random() * 0.8;
+            positions[i+2] = (Math.random() - 0.5) * 0.4;
+        }
+        flameGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const flameMat = new THREE.PointsMaterial({ color: 0x38BDF8, size: 0.08, transparent: true, opacity: 0.8 });
+        const flameParticles = new THREE.Points(flameGeo, flameMat);
+        rocketGroup.add(flameParticles);
+
+        scene.add(rocketGroup);
+        camera.position.z = 4.5;
+
+        // Rocket Launch Hover Animation
+        let clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+            rocketGroup.position.y = Math.sin(t * 5) * 0.15;
+            rocketGroup.rotation.y += 0.02;
+            flameParticles.rotation.y += 0.05;
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>

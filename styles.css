@@ -1,45 +1,37 @@
 /* ==========================================================================
-   Global Theme & Responsive Layout
+   Global Theme & Deep Space Background
    ========================================================================== */
 .stApp {
-    background-color: #0F172A; /* Slate Navy */
+    background-color: #070A12 !important;
     color: #F8FAFC;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Scrollbar Customization */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #0F172A;
-}
-::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #475569;
-}
+/* Hide Default Streamlit Chrome for Clean Presentation */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
 
-/* Header Banner Container */
+/* Custom Scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #070A12; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #38BDF8; }
+
+/* Main Header Container */
 .main-header-container {
-    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-    border: 1px solid #334155;
-    border-radius: 16px;
-    padding: 1.5rem 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 1.75rem 2.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .main-header-title {
-    font-size: clamp(1.5rem, 3vw, 2.25rem); /* Fluid typography */
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
     font-weight: 800;
-    background: linear-gradient(135deg, #38BDF8 0%, #818CF8 100%);
+    background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #C084FC 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0;
@@ -47,105 +39,91 @@
 
 .main-header-subtitle {
     color: #94A3B8;
-    font-size: clamp(0.875rem, 1.5vw, 1rem);
-    margin: 0;
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
 }
 
 /* ==========================================================================
-   Sidebar & Form Controls
+   Main Page Control Cards (Formerly Sidebar)
    ========================================================================== */
-section[data-testid="stSidebar"] {
-    background-color: #1E293B !important;
-    border-right: 1px solid #334155;
+.control-card {
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
 }
 
-/* File Upload Zone */
-section[data-testid="stFileUploadDropzone"] {
-    background-color: #0F172A !important;
-    border: 2px dashed #334155 !important;
-    border-radius: 12px !important;
-    transition: all 0.2s ease-in-out;
-}
-
-section[data-testid="stFileUploadDropzone"]:hover {
-    border-color: #38BDF8 !important;
-    background-color: rgba(56, 189, 248, 0.05) !important;
-}
-
-/* Modern Gradient Pill Buttons */
+/* modern Pill Button */
 div.stButton > button {
-    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+    background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%) !important;
     color: #FFFFFF !important;
-    font-weight: 600 !important;
-    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
     border: none !important;
-    border-radius: 25px !important;
-    padding: 0.65rem 1.8rem !important;
+    border-radius: 30px !important;
+    padding: 0.75rem 2rem !important;
     width: 100% !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.35) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4) !important;
 }
 
 div.stButton > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.55) !important;
-    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
-}
-
-/* Inputs & Search Bars */
-.stTextInput > div > div > input {
-    background-color: #1E293B !important;
-    color: #F8FAFC !important;
-    border: 1px solid #334155 !important;
-    border-radius: 12px !important;
-    padding: 0.75rem 1rem !important;
-    font-size: 1rem !important;
-}
-
-.stTextInput > div > div > input:focus {
-    border-color: #38BDF8 !important;
-    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25) !important;
-}
-
-/* Sliders */
-.stSlider > div[data-baseweb="slider"] > div {
-    background-color: #38BDF8 !important;
+    transform: translateY(-3px) scale(1.01) !important;
+    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.6) !important;
 }
 
 /* ==========================================================================
-   Card Displays & Source Expanders
+   Dynamic Color Response Cards
    ========================================================================== */
-/* Answer Container Card */
-.answer-card {
-    background: #1E293B;
-    border-left: 4px solid #38BDF8;
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    margin: 1rem 0 1.5rem 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    overflow-x: auto; /* Scrollable if long tables/text appear */
+/* Success / Answer Acquired (Emerald Blue Gradient) */
+.answer-card-success {
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid #10B981;
+    border-left: 6px solid #10B981;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+    color: #ECFDF5;
+    font-size: 1.05rem;
+    line-height: 1.6;
 }
 
-/* Expandable Source Attribution Cards */
-.streamlit-expanderHeader {
-    background-color: #1E293B !important;
-    border-radius: 10px !important;
-    border: 1px solid #334155 !important;
-    color: #38BDF8 !important;
-    font-weight: 600 !important;
-    transition: background-color 0.2s ease !important;
+/* Warning / Answer Not Available (Crimson Accent) */
+.answer-card-notfound {
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid #EF4444;
+    border-left: 6px solid #EF4444;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2);
+    color: #FEE2E2;
+    font-size: 1.05rem;
+    line-height: 1.6;
 }
 
-.streamlit-expanderHeader:hover {
-    background-color: #334155 !important;
+/* Status Namespace Pill */
+.status-pill-active {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.825rem;
+    font-weight: 600;
 }
 
-/* Mobile Responsiveness Adjustments */
-@media (max-width: 768px) {
-    .main-header-container {
-        padding: 1rem 1.25rem;
-    }
-    .answer-card {
-        padding: 1rem;
-    }
+.status-pill-inactive {
+    display: inline-block;
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.825rem;
+    font-weight: 600;
 }

@@ -1,51 +1,53 @@
-graph TD
-    %% Node Definitions
-    User([User Client])
-    
-    subgraph Streamlit_UI ["Streamlit Interface (app.py)"]
-        Sidebar["Sidebar Controls<br/>(Chunk Size, Top-K, Threshold)"]
-        PDF_Up["PDF File Uploader"]
-        Chat_Input["Query Input & History"]
-    end
+# ⚡ Spatial 3D PDF Intelligence Engine
 
-    subgraph Document_Ingestion ["Ingestion Pipeline (ingestion.py)"]
-        PDF_Load["PyPDFLoader<br/>(layout mode)"]
-        Splitter["RecursiveCharacterTextSplitter"]
-        Embed_Local["SentenceTransformers<br/>(all-MiniLM-L6-v2)"]
-    end
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Pinecone](https://img.shields.io/badge/VectorDB-Pinecone-000000.svg)](https://www.pinecone.io/)
+[![Groq](https://img.shields.io/badge/LLM-Groq_Llama_3.3_70B-f3603f.svg)](https://groq.com/)
 
-    subgraph Vector_DB ["Pinecone Vector Index"]
-        Index["Index: pdf-rag-index"]
-        Namespace["Namespace Partitioning"]
-    end
+An enterprise-grade, multi-tenant **Retrieval-Augmented Generation (RAG)** platform featuring layout-aware PDF ingestion, multi-tenant vector namespace isolation, guarded zero-temperature LLM inference, and an interactive 3D spatial user interface built with **Streamlit** and **Three.js**.
 
-    subgraph Query_Chain ["RAG Engine (rag_chain.py)"]
-        Query_Embed["Embed User Query"]
-        Similarity_Search["Cosine Similarity Search<br/>(Top-K Chunks)"]
-        Threshold_Filter{"Score >= Threshold?"}
-        Fallback["Return: 'Answer not available...'"]
-        Prompt_Construct["Assemble Context String"]
-        Groq_LLM["Groq API<br/>(llama-3.3-70b-versatile)<br/>temp=0.0"]
-    end
+---
 
-    %% Flow Connections
-    User --> PDF_Up
-    User --> Chat_Input
-    
-    PDF_Up --> PDF_Load
-    PDF_Load --> Splitter
-    Splitter --> Embed_Local
-    Embed_Local -->|Upsert Chunks + Metadata| Namespace
-    Namespace --> Index
+## 📸 Interface & Highlights
 
-    Chat_Input --> Query_Embed
-    Query_Embed --> Similarity_Search
-    Similarity_Search -->|Fetch Vectors| Index
-    Similarity_Search --> Threshold_Filter
-    
-    Threshold_Filter -->|No| Fallback
-    Threshold_Filter -->|Yes| Prompt_Construct
-    
-    Prompt_Construct --> Groq_LLM
-    Groq_LLM -->|Response + Sources| Chat_Input
-    Fallback --> Chat_Input
+* **3D Interactive Canvas:** Interactive WebGL particle constellation and vector core floating behind the UI.
+* **Rocket Ingestion Loader:** Live 3D animated rocket launch modal providing visual feedback during PDF vectorization.
+* **Dynamic Color-Coded Answers:** Emerald green highlight cards for verified extractions and crimson red alert cards for out-of-scope or missing information.
+* **Traceable Attributions:** Confidence scores and exact source page excerpts provided for every answer.
+
+---
+
+## 🏗️ Architecture Blueprint
+
+```text
+                                  +-----------------------+
+                                  |   Uploaded PDF File   |
+                                  +-----------+-----------+
+                                              |
+                                              v
+                                  +-----------------------+
+                                  | PyPDF Layout Extractor|
+                                  +-----------+-----------+
+                                              |
+                                              v
+                                  +-----------------------+
+                                  | Recursive Text Chunk  |
+                                  +-----------+-----------+
+                                              |
+                                              v
+                                  +-----------------------+
+                                  | MiniLM-L6-v2 Embedder |
+                                  +-----------+-----------+
+                                              |
+                                              v
+  +-----------------------+       +-----------------------+
+  | User Query Input      | ----> | Pinecone Serverless   |
+  +-----------------------+       | (Isolated Namespace)  |
+                                  +-----------+-----------+
+                                              |
+                                              v
+                                  +-----------------------+
+                                  | Groq Llama-3.3-70B    |
+                                  | Guarded Inference     |
+                                  +-----------------------+

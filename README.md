@@ -1,73 +1,24 @@
-# 📚 Multi-Tenant PDF RAG System with Pinecone & Groq
+# Spatial 3D PDF Intelligence Engine — Technical Documentation
 
-A robust, enterprise-grade Retrieval-Augmented Generation (RAG) web application built with **Streamlit**, **LangChain**, **Pinecone Vector DB**, and **Groq (Llama 3.3)**. 
-
-This platform enables users to upload PDF documents, index their content into isolated vector namespaces, and query document content with zero hallucinations, strict source attributions, and real-time parameter tuning.
+This repository contains the complete implementation of a multi-tenant PDF Question-Answering system powered by Pinecone vector storage, Groq LLM inference, and a Three.js 3D user interface.
 
 ---
 
-## 🌟 Key Features
+## 📂 Repository Structure
 
-* **Layout-Aware PDF Ingestion:** Utilizes `PyPDFLoader` in layout mode to preserve spatial document layout, section structures, and complex data tables.
-* **Vector Multi-Tenancy:** Partitioned document indexing via Pinecone namespaces to prevent cross-document data leakage.
-* **Local Embedding Inference:** Generates 384-dimensional dense vectors using `sentence-transformers/all-MiniLM-L6-v2` locally on CPU.
-* **Traceable Source Attribution:** Displays exact page numbers, similarity confidence scores, and raw text excerpts for every retrieved claim.
-* **Zero-Hallucination Guardrails:** Integrates zero-temperature Groq inference (`llama-3.3-70b-versatile`) coupled with strict prompt fallback rules.
-* **Dynamic Hyperparameter Sliders:** Allows real-time adjustment of **Chunk Size**, **Top-K Retrieval Counts**, and **Cosine Similarity Thresholds**.
-* **Query Session History:** Tracks and logs previous QA pairs within the active session.
-
----
-
-## 🏗️ System Architecture
-
-```mermaid
-graph TD
-    User([User Client])
-    
-    subgraph Streamlit_UI ["Streamlit Interface (app.py)"]
-        Sidebar["Sidebar Controls<br/>(Chunk Size, Top-K, Threshold)"]
-        PDF_Up["PDF File Uploader"]
-        Chat_Input["Query Input & History Log"]
-    end
-
-    subgraph Document_Ingestion ["Ingestion Pipeline (ingestion.py)"]
-        PDF_Load["PyPDFLoader<br/>(layout mode)"]
-        Splitter["RecursiveCharacterTextSplitter"]
-        Embed_Local["SentenceTransformers<br/>(all-MiniLM-L6-v2)"]
-    end
-
-    subgraph Vector_DB ["Pinecone Vector Index"]
-        Index["Index: pdf-rag-index"]
-        Namespace["Namespace Partitioning"]
-    end
-
-    subgraph Query_Chain ["RAG Engine (rag_chain.py)"]
-        Query_Embed["Embed User Query"]
-        Similarity_Search["Cosine Similarity Search"]
-        Threshold_Filter{"Score >= Threshold?"}
-        Fallback["Return: 'Answer not available...'"]
-        Prompt_Construct["Assemble Full Context"]
-        Groq_LLM["Groq API<br/>(llama-3.3-70b-versatile)<br/>temp=0.0"]
-    end
-
-    %% Flow Connections
-    User --> PDF_Up
-    User --> Chat_Input
-    
-    PDF_Up --> PDF_Load
-    PDF_Load --> Splitter
-    Splitter --> Embed_Local
-    Embed_Local -->|Upsert Chunks + Metadata| Namespace
-    Namespace --> Index
-
-    Chat_Input --> Query_Embed
-    Query_Embed --> Similarity_Search
-    Similarity_Search -->|Fetch Vectors| Index
-    Similarity_Search --> Threshold_Filter
-    
-    Threshold_Filter -->|No| Fallback
-    Threshold_Filter -->|Yes| Prompt_Construct
-    
-    Prompt_Construct --> Groq_LLM
-    Groq_LLM -->|Response + Sources| Chat_Input
-    Fallback --> Chat_Input
+```text
+PINECONE_pdf_RAG/
+├── .env                    # Environment variables (API keys)
+├── .gitignore              # Git ignore rules
+├── requirements.txt        # Python package dependencies
+├── styles.css              # Glassmorphism UI & dynamic answer card styles
+├── app.py                  # Main Streamlit application entry point
+│
+├── backend/
+│   ├── ingestion.py        # PDF extraction, chunking, & Pinecone vector indexing
+│   └── rag_chain.py        # Cosine similarity retrieval & Groq LLM inference
+│
+└── frontend/
+    ├── index.html          # Three.js WebGL canvas container
+    ├── app.js              # Three.js 3D animation loop
+    └── rocket_loader.html  # Interactive 3D rocket loader modal
